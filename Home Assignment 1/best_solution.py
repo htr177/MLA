@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def knn(training_points, training_labels, test_point, test_label):
-    distances = np.sum((training_points - test_point)**2, axis=1)
+    distances = np.diag(np.dot(training_points - test_point, (training_points - test_point).T))
     sorted_indices = np.argsort(distances)
     sorted_labels = training_labels[sorted_indices]
     cumulative_errors = np.sign(np.cumsum(sorted_labels)) != np.sign(test_label)
@@ -38,18 +38,16 @@ for n in n_values:
     for validation_indices in validation_sets:
         validation_errors_for_set = []
 
-        # Iterate through each K value
-        for k in range(1, m + 1):
-            total_errors = 0
+        total_errors = np.zeros(m)
+        
+        # Iterate through each test point in the validation set
+        for test_idx in validation_indices:
+            test_point = data_matrix[test_idx]
+            test_label = labels[test_idx]
 
-            # Iterate through each test point in the validation set
-            for test_idx in validation_indices:
-                test_point = data_matrix[test_idx]
-                test_label = labels[test_idx]
-
-                # Calculate errors for the current K value using knn function
-                errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
-                total_errors += errors[k - 1]
+            # Calculate errors for the current K value using knn function
+            errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
+            total_errors += errors
 
             # Calculate validation error for the current K value
             validation_error = total_errors / len(validation_indices)
@@ -93,9 +91,6 @@ plt.title("Variance of Validation Errors vs. K for Different n")
 plt.grid(alpha=0.2)
 plt.legend()
 plt.show()
-
-
-
 
 
 
