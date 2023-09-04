@@ -8,8 +8,8 @@ def knn(training_points, training_labels, test_point, test_label):
     cumulative_errors = np.sign(np.cumsum(sorted_labels)) != np.sign(test_label)
     return cumulative_errors
 
-data_matrix = np.loadtxt("MNIST-5-6-Subset/MNIST-5-6-Subset-Heavy-Corruption.txt").reshape(1877, 784)
-labels = np.loadtxt("MNIST-5-6-Subset/MNIST-5-6-Subset-Labels.txt")
+data_matrix = np.loadtxt("Home Assignment 1/MNIST-5-6-Subset/MNIST-5-6-Subset-Heavy-Corruption.txt").reshape(1877, 784)
+labels = np.loadtxt("Home Assignment 1/MNIST-5-6-Subset/MNIST-5-6-Subset-Labels.txt")
 labels = np.where(labels == 5, -1, 1)
 
 # Using the first 50 training points and labels
