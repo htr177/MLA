@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def knn(training_points, training_labels, test_point, test_label):
-    distances = np.sum((training_points - test_point)**2, axis=1)
+    distances = np.diag(np.dot(training_points - test_point, (training_points - test_point).T))
     sorted_indices = np.argsort(distances)
     sorted_labels = training_labels[sorted_indices]
     cumulative_errors = np.sign(np.cumsum(sorted_labels)) != np.sign(test_label)
@@ -36,24 +36,23 @@ validation_errors = []
 for validation_indices in validation_sets:
     validation_errors_for_set = []
 
-    # Iterate through each K value
-    for k in range(1, m + 1):
-        total_errors = 0
 
-        # Iterate through each test point in the validation set
-        for test_idx in validation_indices:
-            test_point = data_matrix[test_idx]
-            test_label = labels[test_idx]
+    total_errors = np.zeros(50)
 
-            # Calculate errors for the current K value using knn function
-            errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
-            total_errors += errors[k - 1]
+    # Iterate through each test point in the validation set
+    for test_idx in validation_indices:
+        test_point = data_matrix[test_idx]
+        test_label = labels[test_idx]
 
-        # Calculate validation error for the current K value
-        validation_error = total_errors / len(validation_indices)
-        validation_errors_for_set.append(validation_error)
+        # Calculate errors for the current K value using knn function
+        errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
+        total_errors += errors/len(validation_indices)
 
-    validation_errors.append(validation_errors_for_set)
+    # Calculate validation error for the current K value
+    validation_error = total_errors / len(validation_indices)
+    validation_errors_for_set.append(validation_error)
+
+validation_errors.append(validation_errors_for_set)
 
 # Plot the validation error curves for different K values
 for i, validation_error_curve in enumerate(validation_errors, start=1):

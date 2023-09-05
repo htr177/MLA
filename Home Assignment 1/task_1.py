@@ -37,26 +37,24 @@ for n in n_values:
     for validation_indices in validation_sets:
         validation_errors_for_set = []
 
-        # Iterate through each K value
-        for k in range(1, m + 1):
-            total_errors = 0
+        total_errors = np.zeros(50)
 
-            # Iterate through each test point in the validation set
-            for test_idx in validation_indices:
-                test_point = data_matrix[test_idx]
-                test_label = labels[test_idx]
+        # Iterate through each test point in the validation set
+        for test_idx in validation_indices:
+            test_point = data_matrix[test_idx]
+            test_label = labels[test_idx]
 
-                # Calculate errors for the current K value using knn function
-                errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
-                total_errors += errors[k - 1]
+            # Calculate errors for the current K value using knn function
+            errors = knn(data_matrix[:m], labels[:m], test_point, test_label)
+            total_errors += errors/len(validation_indices)
 
-            # Calculate validation error for the current K value
-            validation_error = total_errors / len(validation_indices)
-            validation_errors_for_set.append(validation_error)
+        # Calculate validation error for the current K value
+        validation_error = total_errors / len(validation_indices)
+        validation_errors_for_set.append(validation_error)
 
-        validation_errors_for_n.append(validation_errors_for_set)
+    validation_errors_for_n.append(validation_errors_for_set)
 
-    validation_errors.append(validation_errors_for_n)
+validation_errors.append(validation_errors_for_n)
 
 # Plot the validation error curves for different n values
 for i, n in enumerate(n_values):
