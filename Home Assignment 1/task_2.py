@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def knn(training_points, training_labels, test_point, test_label):
-    distances = np.sum((training_points - test_point)**2, axis=1)
+    distances = np.diagonal(np.dot(training_points - test_point, (training_points - test_point).T))
     sorted_indices = np.argsort(distances)
     sorted_labels = training_labels[sorted_indices]
     cumulative_errors = np.sign(np.cumsum(sorted_labels)) != np.sign(test_label)
     return cumulative_errors
 
 data_matrix = np.loadtxt("MNIST-5-6-Subset/MNIST-5-6-Subset-Heavy-Corruption.txt").reshape(1877, 784)
-labels = np.loadtxt("MNIST-5-6-Subset/MNIST-5-6-Subset-Labels.txt")
+labels = np.loadtxt("MNIST-5-6-Subset/MNIST-5-6-Subset-Labels.txt") # Manually insert corrupted files
 labels = np.where(labels == 5, -1, 1)
 
 # Using the first 50 training points and labels
@@ -61,8 +61,9 @@ for i, validation_error_curve in enumerate(validation_errors, start=1):
 
 plt.xlabel("K")
 plt.ylabel("Validation Error")
-plt.title("Validation Error as a Function of K for n = 80 (Heavy Corruption)")
+plt.title("Validation Error as a Function of K for n = 80 (Heavily Corrupted)")
 plt.grid(alpha=0.2)
 plt.legend()
+plt.ylim(0, 1)
+plt.xlim(1, 50)
 plt.show()
-
