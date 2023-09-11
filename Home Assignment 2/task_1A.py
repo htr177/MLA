@@ -14,10 +14,9 @@ np.random.seed(seed)
 empirical_frequencies = []
 
 # Generate random variables and compute sample means for each repetition
-for _ in range(num_repetitions):
-    sample = np.random.binomial(1, 0.5, sample_size)  # Generate 20 Bernoulli random variables
-    sample_mean = np.mean(sample)  # Compute the sample mean
-    empirical_frequencies.append(sample_mean)
+sample = np.random.binomial(sample_size, 0.5, num_repetitions)  # Generate 20 Bernoulli random variables
+sample_mean = sample / sample_size  # Compute the sample mean
+empirical_frequencies.append(sample_mean)
 
 # Define a list of alpha values
 alpha_values = np.arange(0.5, 1.05, 0.05)
@@ -27,8 +26,7 @@ alpha_frequencies = []
 
 # Calculate the empirical frequencies for each alpha
 for alpha in alpha_values:
-    count = sum(1 for freq in empirical_frequencies if freq >= alpha)
-    alpha_frequencies.append(count / num_repetitions)
+    alpha_frequencies.append(np.count_nonzero(sample_mean >= alpha) / num_repetitions)
 
 # Calculate the Markov bounds for each alpha using coin_bias
 markov_bounds = []
@@ -41,7 +39,7 @@ for alpha in alpha_values:
 chebyshev_bounds = []
 
 for alpha in alpha_values:
-    chebyshev_bound = ((coin_bias * (1 - coin_bias)) / (alpha * sample_size)) / ((alpha - coin_bias) ** 2)
+    chebyshev_bound = coin_bias ** 2 / alpha ** 2
     chebyshev_bounds = [min(1, bound) for bound in chebyshev_bounds]
     chebyshev_bounds.append(chebyshev_bound)
     
