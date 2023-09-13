@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.ticker import PercentFormatter
 from scipy.stats import binom
 
 # Number of repetitions and sample size
@@ -41,7 +40,7 @@ for alpha in alpha_values:
 chebyshev_bounds = []
 
 for alpha in alpha_values:
-    chebyshev_bound = ((coin_bias * (1 - coin_bias)) / (alpha * sample_size)) / ((alpha - coin_bias) ** 2)
+    chebyshev_bound = ((coin_bias * (1 - coin_bias)) / (sample_size * (alpha - coin_bias) ** 2))
     chebyshev_bounds = [min(1, bound) for bound in chebyshev_bounds]
     chebyshev_bounds.append(chebyshev_bound)
     
@@ -69,9 +68,6 @@ plt.grid(False)
 plt.ylim((0.0, 1.1))
 plt.xlim((0.08, 1.02))
 plt.xticks([i for i in np.arange(0.1, 1.05, 0.05)])
-
-# Format the Y-axis as percentages
-plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
 
 plt.show()
 
