@@ -21,6 +21,7 @@ for _ in range(num_repetitions):
 # Define a list of alpha values
 alpha_values = np.arange(0.1, 1.05, 0.05)
 
+
 # Initialize an array to store the empirical frequencies for each alpha
 alpha_frequencies = []
 

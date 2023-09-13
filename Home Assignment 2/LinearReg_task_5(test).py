@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Read the data from the file
-data = np.loadtxt("Home Assignment 2/PCB.dt")
+data = np.loadtxt("PCB.dt")
 
 X = data[:, 0]
 Y = data[:, 1]
@@ -39,7 +39,7 @@ x_values = np.linspace(0, 14, 100)
 y_values = h_sqrt(x_values)
 
 plt.figure()
-plt.plot(X, Y, 'o', label='Data')
+plt.plot(X, np.log(Y), 'o', label='Data')
 plt.xlabel('Age')
 plt.ylabel('PCB Concentration')
 plt.plot(x_values, y_values, 'r-', label='Non-linear Model')

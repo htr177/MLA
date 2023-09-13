@@ -15,14 +15,13 @@ coefficients = np.linalg.inv(X.T @ X) @ X.T @ Y
 print(coefficients)
 
 # Plot the data points
-# plt.scatter(X[:, 0], Y, marker='o', color='b', label='Data Points')
+#plt.scatter(X[:, 0], Y, marker='o', color='b', label='Data Points')
 
-# # Plot the regression line
-# plt.plot(X[:, 0], X @ coefficients, linestyle='-', color='r', label='Regression Line')
-# plt.show()
+# Plot the regression line
+#plt.plot(X[:, 0], X @ coefficients, linestyle='-', color='r', label='Regression Line')
+#plt.show()
 
 # Build a non-linear model with coefficient from the linear regression
-X.T[0] = np.sqrt(X.T[0])
 Y_log = np.log(Y)
 
 # Find coefficents a and b for the non-linear model
@@ -46,28 +45,23 @@ print("MSE", mse)
 x = np.linspace(0, 14, 100)
 y = coefficients_log[0] * x + coefficients_log[1]
 plt.figure()
-plt.title('Log of Data vs. Non-linear Model')
 plt.plot(X[:, 0], Y_log, 'o')
 plt.xlabel('Data')
 plt.ylabel('Log of Data')
 plt.plot(x, y, 'r-')
-plt.legend()
-plt.xlim((0, 12))
-plt.ylim((-1, 4))
 plt.show()
 
 # Compute the coefficient of determination
 R_2 = 1 - mse / np.var(Y)
 print("R2", R_2)
 
-print("TUBORG", coefficients_log)
 
 # Define the non-linear model h(x) = exp(a√x + b)
 a_sqrt = coefficients_log[0]
 b_sqrt = coefficients_log[1]
 
 def h_sqrt(x):
-    return np.exp(a_sqrt * (x) + b_sqrt)
+    return np.exp(a_sqrt * np.sqrt(x) + b_sqrt)
 
 # Calculate the predictions
 preds_sqrt = h_sqrt(X[:, 0])
@@ -82,16 +76,12 @@ print("R2 sqrt", R_2_sqrt)
 
 # Plot the data and the model output
 x_values = np.linspace(0, 14, 100)
-y_values = a_sqrt * np.sqrt(x_values) + b_sqrt
-X.T[0] = (X.T[0])**2
+y_values = h_sqrt(x_values)
 
 plt.figure()
 plt.plot(X[:, 0], Y_log, 'o', label='Log of Data')
-plt.title('Log of Data vs. Non-linear Model (sqrt of x)')
 plt.xlabel('Data')
 plt.ylabel('Log of Data')
 plt.plot(x_values, y_values, 'r-', label='Non-linear Model')
-plt.xlim((0, 13))
-plt.ylim((-1, 4))
 plt.legend()
 plt.show()
